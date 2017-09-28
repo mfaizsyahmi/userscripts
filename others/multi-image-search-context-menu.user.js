@@ -33,7 +33,11 @@
 
 if (!("contextMenu" in document.documentElement &&
       "HTMLMenuItemElement" in window)) return;
+	  
+var body = document.body;
+body.addEventListener("contextmenu", initMenu, false);
 
+// menu definition
 var menuItems = [
 	{
 		id: 'google',
@@ -47,7 +51,8 @@ var menuItems = [
 		tJV5MNRiNYCfmxmuGQZ+/PrHwMmOqRyrAX///WfgYEOV4mBjwjAUpwHHL31iyA6XgRvCwcbEkBUm\
 		w3DuxmcMtVgDkYONicHLVoTBSJOXgYONieHHz38Ml+98Ydh88DXDtx//CBtACmBiYGCYS4H+OYyU\
 		5kasgUgKAADN8WLFzlj9rgAAAABJRU5ErkJggg==',
-		search: function searchGI(imageURL) {
+		click: function searchGI(aEvent) {
+			var imageURL = aEvent.target.dataset.imageURL;
 			if (imageURL.indexOf("data:") == 0) {
 				var base64Offset = imageURL.indexOf(",");
 				if (base64Offset != -1) {
@@ -87,7 +92,8 @@ var menuItems = [
 		/8QAGREBAQEAAwAAAAAAAAAAAAAAIQERAFFx/9oACAEDAQE/EKzIchCPaidx5//EABkRAQEBAAMA\
 		AAAAAAAAAAAAAAERIQAxQf/aAAgBAgEBPxBkhI3BqQdQvbwaKvP/xAAYEAEBAQEBAAAAAAAAAAAA\
 		AAABESEAMf/aAAgBAQABPxBQi8gk6bDMSBW5McJVwp4NNWS4P4qshDoLgAKLB/MjhfhrzdUBTz//2Q==',
-		search: function searchIqdb(imageURL) {
+		click: function searchIqdb(aEvent) {
+			var imageURL = aEvent.target.dataset.imageURL;
 			var form = prepareForm({action: '//www.iqdb.org/'});
 			if (imageURL.indexOf("data:") == 0) {
 				var base64Offset = imageURL.indexOf(",");
@@ -107,8 +113,8 @@ var menuItems = [
 			body.removeChild(form);
 		}
 	}, {
-		id: 'iqdb',
-		label: 'iqdb search',
+		id: 'saucenao',
+		label: 'SauceNAO search',
 		icon: ' data:image/bmp;base64,\
 		Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAADAADEDgAAxA4AAAAAAAAAAAAAAAAAAA\
 		AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////////////////\
@@ -124,7 +130,8 @@ var menuItems = [
 		//AAAAAAAAAAAAAAAAAAAAAAAA////////AAAA////AAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAA\
 		AAAAAAAAAAAAAAAAAAAAAAAA////AAAAAAAA//////////////////////////////////////////\
 		//////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-		search: function searchSauceNao(imageURL) {
+		click: function searchSauceNao(aEvent) {
+			var imageURL = aEvent.target.dataset.imageURL;
 			if (imageURL.indexOf("data:") == 0) {
 				var base64Offset = imageURL.indexOf(",");
 				if (base64Offset != -1) {
@@ -147,26 +154,22 @@ var menuItems = [
 	}
 ];
 
-function populateMenu() {
-	menu = body.appendChild(document.createElement("menu"));
+function populateMenu(menuItems) {
+	menu = document.createElement('menu');
+	menu.id = 'userscript-search-by-image';
+	menu.type = 'context';
 	for (var i = 0; i < menuItems.length; i++) {
 		var item = document.createElement('menuitem');
 		item.id = menuItems[i].id;
 		item.label = menuItems[i].label;
 		item.icon = menuItems[i].icon;
-		item.addEventListener('click', function(aEvent) {
-			// Executed when user click on menuitem
-			// aEvent.target is the <menuitem> element
-			var imageURL = aEvent.target.dataset.imageURL;
-			menuItems[i].search(imageURL);
-		});
+		item.addEventListener('click', menuItems[i].click );
 		menu.appendChild(item);
 	}
+	body.appendChild(menu);
+	console.log(`${menuItems.length} items populated.`);
 }
-populateMenu();
-
-var body = document.body;
-body.addEventListener("contextmenu", initMenu, false);
+populateMenu(menuItems);
 
 /*document.querySelectorAll("#userscript-search-by-image menuitem")
         .forEach( function (el,k,o) {
@@ -174,12 +177,15 @@ body.addEventListener("contextmenu", initMenu, false);
 });*/
 
 function initMenu(aEvent) {
+	// debug
+	//body.contextmenu = 'userscript-search-by-image';
+	//return;
 	// Executed when user right click on web page body
 	// aEvent.target is the element you right click on
 	var node = aEvent.target;
 	var items = document.querySelectorAll("#userscript-search-by-image menuitem");
 	if (node.localName == "img") {
-		body.contextmenu = 'userscript-search-by-image';
+		body.setAttribute("contextmenu", "userscript-search-by-image");
 		items.forEach(function (el, k, o) {
 			el.dataset.imageURL = node.src;
 			console.log(el.dataset.imageURL)
