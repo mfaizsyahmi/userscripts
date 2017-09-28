@@ -22,10 +22,10 @@
 // @name            Google Image Search Context Menu
 // @namespace       https://github.com/mfaizsyahmi
 // @description     Add 'Search by Image' in browser context menu when you right click on image to search Google with that image.
-// @version         2.0
+// @version         2.0.1
 // @license         GPL
 // @resource        license https://raw.github.com/LouCypher/userscripts/master/licenses/GPL/LICENSE.txt
-// @updateURL       https://userscripts.org/scripts/source/151097.meta.js
+// @updateURL       https://github.com/mfaizsyahmi/userscripts/raw/master/others/multi-image-search-context-menu.user.js
 // @include         *
 // @exclude         file://*
 // @grant           GM_openInTab
