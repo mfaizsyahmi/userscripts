@@ -19,9 +19,9 @@
 */
 
 // ==UserScript==
-// @name            Google Image Search Context Menu
+// @name            Multi Image Search Context Menu
 // @namespace       https://github.com/mfaizsyahmi
-// @description     Add 'Search by Image' in browser context menu when you right click on image to search Google with that image.
+// @description     Add 'Search by Image' in browser context menu when you right click on image to search a few sites with that image.
 // @version         2.0.1
 // @license         GPL
 // @resource        license https://raw.github.com/LouCypher/userscripts/master/licenses/GPL/LICENSE.txt
